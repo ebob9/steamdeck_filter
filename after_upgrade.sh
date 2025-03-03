@@ -22,7 +22,7 @@ ensure_root() {
 
 # Function to ensure required files exist in the current directory
 ensure_required_files() {
-    local required_files=("10-update-dnsmasq.sh" "dnsmasq.conf" "networkmanager-dns.conf")
+    local required_files=("10-update-dnsmasq.sh" "dnsmasq.conf" "networkmanager-dns.conf" "no-systemd-resolved.conf")
     local missing_files=()
 
     for file in "${required_files[@]}"; do
@@ -90,6 +90,8 @@ check_error
 
 # disable resolved
 echo -n "# Disabling system-resolved.. "
+systemctl stop systemd-resolved
+check_error true
 systemctl disable --now systemd-resolved
 check_error
 
@@ -97,6 +99,12 @@ check_error
 # toast /etc/resolv.conf
 echo -n "# Unlinking /etc/resolv.conf.. "
 rm -f /etc/resolv.conf
+check_error
+
+echo -n "# Asking systemd-resolved to get out of the way.. "
+sudo sed -i '/^#\?DNSStubListener=/c\DNSStubListener=no' /etc/systemd/resolved.conf
+check_error true
+grep -q '^#\?DNSStubListener=' /etc/systemd/resolved.conf || echo 'DNSStubListener=no' | sudo tee -a /etc/systemd/resolved.conf
 check_error
 
 # recreate /etc/resolv.conf
@@ -117,10 +125,18 @@ chmod 755 /etc/NetworkManager/dispatcher.d/10-update-dnsmasq
 check_error
 
 # restart services
-echo -n "# Restarting Services"
+echo -n "# Restarting Services.. "
+# ask systemd to stop just in case.
+systemctl stop systemd-resolved
+check_error true
 sudo systemctl enable --now dnsmasq
 check_error true
 sudo systemctl restart NetworkManager
+check_error
+
+echo -n "# Re-locking FS.. "
+#RE-LOCK FILESYSTEM
+steamos-readonly enable
 check_error
 
 echo "# Completed Successfully!"
