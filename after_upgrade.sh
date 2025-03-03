@@ -5,7 +5,7 @@
 #
 # This script expects superuser privileges
 #
-# Thanks to cronos141 from this redit post for the idea:
+# Thanks to crono141 from this redit post for the idea:
 # https://www.reddit.com/r/SteamDeck/comments/zpuret/my_post_update_installation_script/
 #
 
