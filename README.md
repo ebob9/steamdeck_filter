@@ -12,7 +12,7 @@ To install:
 2. Open up `kconsole`.
 3. From here, set a password for the `deck` account by running `passwd deck`
    * You will be prompted for a password twice. If it's already set, and you don't remember it, you will need to search how to recover it.
-4. SUDO to root by running `su -`
+4. SUDO to root by running `sudo su -`
    * adasd
 5. Clone this repo - `git clone https://github.com/ebob9/steamdeck_filter.git`
 6. cd into the directory `steamdeck_filter`
