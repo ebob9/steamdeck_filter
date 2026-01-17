@@ -13,7 +13,7 @@ To install:
 3. From here, set a password for the `deck` account by running `passwd deck`
    * You will be prompted for a password twice. If it's already set, and you don't remember it, you will need to search how to recover it.
 4. SUDO to root by running `sudo su -`
-   * adasd
+   * You can start an sshd server at this point if you want. The command is `sudo systemctl start sshd`
 5. Clone this repo - `git clone https://github.com/ebob9/steamdeck_filter.git`
 6. cd into the directory `steamdeck_filter`
 7. Run the script `bash ./after_upgrade.sh` to install the filter.
