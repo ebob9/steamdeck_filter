@@ -16,7 +16,7 @@ To install:
    * adasd
 5. Clone this repo - `git clone https://github.com/ebob9/steamdeck_filter.git`
 6. cd into the directory `steamdeck_filter`
-7. Run the script `./after_upgrade.sh` to install the filter.
+7. Run the script `bash ./after_upgrade.sh` to install the filter.
 
 Note - after every patch you'll need to run the script again, as steam updates will wipe out the changes.
 
