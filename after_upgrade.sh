@@ -22,7 +22,7 @@ ensure_root() {
 
 # Function to ensure required files exist in the current directory
 ensure_required_files() {
-    local required_files=("10-update-dnsmasq.sh" "dnsmasq.conf" "networkmanager-dns.conf" "no-systemd-resolved.conf")
+    local required_files=("10-update-dnsmasq.sh" "dnsmasq.conf" "networkmanager-dns.conf" "no-stub.conf")
     local missing_files=()
 
     for file in "${required_files[@]}"; do
