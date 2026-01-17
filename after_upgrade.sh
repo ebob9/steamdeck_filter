@@ -80,6 +80,14 @@ check_error
 # install DNSMASQ
 echo -n "# Installing dnsmasq.. "
 pacman -Syu --noconfirm dnsmasq
+check_error true
+sudo mkdir -p /etc/systemd/system/dnsmasq.service.d/
+sudo tee /etc/systemd/system/dnsmasq.service.d/override.conf <<EOF
+[Unit]
+# Ensure dnsmasq wins the race for Port 53
+Before=systemd-resolved.service
+Conflicts=systemd-resolved.service
+EOF
 check_error
 
 #config dnsmasq
@@ -105,6 +113,10 @@ echo -n "# Asking systemd-resolved to get out of the way.. "
 sudo sed -i '/^#\?DNSStubListener=/c\DNSStubListener=no' /etc/systemd/resolved.conf
 check_error true
 grep -q '^#\?DNSStubListener=' /etc/systemd/resolved.conf || echo 'DNSStubListener=no' | sudo tee -a /etc/systemd/resolved.conf
+check_error true
+sudo mkdir -p /etc/systemd/resolved.conf.d/
+check_error true
+cat ./no-stub.conf > /etc/systemd/resolved.conf.d/no-stub.conf
 check_error
 
 # recreate /etc/resolv.conf
@@ -119,7 +131,7 @@ check_error true
 # NetworkManager hook
 mkdir -p /etc/NetworkManager/dispatcher.d
 check_error true
-cat ./10-update-dnsmasq > /etc/NetworkManager/dispatcher.d/10-update-dnsmasq
+cat ./10-update-dnsmasq.sh > /etc/NetworkManager/dispatcher.d/10-update-dnsmasq
 check_error true
 chmod 755 /etc/NetworkManager/dispatcher.d/10-update-dnsmasq
 check_error
